@@ -1,0 +1,34 @@
+[debug] [2020-07-31T21:38:55.557Z] ----------------------------------------------------------------------
+[debug] [2020-07-31T21:38:55.559Z] Command:       /home/ubuntudog/.nvm/versions/node/v14.5.0/bin/node /home/ubuntudog/.nvm/versions/node/v14.5.0/bin/firebase deploy
+[debug] [2020-07-31T21:38:55.559Z] CLI Version:   8.6.0
+[debug] [2020-07-31T21:38:55.559Z] Platform:      linux
+[debug] [2020-07-31T21:38:55.560Z] Node Version:  v14.5.0
+[debug] [2020-07-31T21:38:55.560Z] Time:          Sat Aug 01 2020 03:08:55 GMT+0530 (India Standard Time)
+[debug] [2020-07-31T21:38:55.560Z] ----------------------------------------------------------------------
+[debug] [2020-07-31T21:38:55.560Z] 
+[debug] [2020-07-31T21:38:55.572Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-31T21:38:55.572Z] > authorizing via signed-in user
+[debug] [2020-07-31T21:38:55.573Z] [iam] checking project fischerkarte for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-07-31T21:38:55.575Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-07-31T21:38:55.575Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-07-31T21:38:55.921Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 31 Jul 2020 21:38:58 GMT","server":"scaffolding on HTTPServer2","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-07-31T21:38:55.937Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fischerkarte:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-07-31T21:38:57.502Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 31 Jul 2020 21:38:59 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1310","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-07-31T21:38:57.505Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fischerkarte  
+ 
+[debug] [2020-07-31T21:38:58.555Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 31 Jul 2020 21:39:01 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'fischerkarte'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2020-07-31T21:38:58.560Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/fischerkarte/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2020-07-31T21:39:01.081Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Fri, 31 Jul 2020 21:39:03 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting[fischerkarte]: beginning deploy... 
+[info] i  hosting[fischerkarte]: found 19 files in build 
+[debug] [2020-07-31T21:39:01.536Z] [hosting] hash cache [YnVpbGQ] stored for 19 files
+[debug] [2020-07-31T21:39:01.538Z] [hosting][hash queue][FINAL] {"max":429,"min":54,"avg":100.21052631578948,"active":0,"complete":19,"success":19,"errored":0,"retried":0,"total":19,"elapsed":443}
+[debug] [2020-07-31T21:39:01.538Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/fischerkarte/versions/34367be82e078221:populateFiles  
+ <request body omitted>
