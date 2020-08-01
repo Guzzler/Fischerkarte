@@ -13,6 +13,7 @@ class BaseContent extends React.Component {
         <Col span={24} className='f48 center strong' >
           <img src={fischerkarteLogo} alt='fischerkarte-logo' />
           <Loader />
+          <div style={{ marginBottom: 300 }}> Coming Soon ...</div>
         </Col>
       </Row>
     )
