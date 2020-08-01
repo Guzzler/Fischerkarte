@@ -7,7 +7,7 @@ import {
 import posed, { PoseGroup } from 'react-pose'
 
 import BaseContent from '../components/main-content/BaseContent'
-import PageNotFound from '../../common/error-pages/PageNotFound'
+import PageNotFound from '../components/common/error-pages/PageNotFound'
 
 const RouteContainer = posed.div({
   enter: { opacity: 1, delay: 300, beforeChildren: true },

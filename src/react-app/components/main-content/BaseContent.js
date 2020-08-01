@@ -2,14 +2,17 @@ import React from 'react'
 import { Row, Col } from 'antd'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Loader from '../common/Loader'
 
+import fischerkarteLogo from '../../../assets/images/fischerkarte-logo.png'
 
 class BaseContent extends React.Component {
   render() {
     return (
       <Row className='padding--sides width-100 height-100 background-offwhite'>
         <Col span={24} className='f48 center strong' >
-          Welcome to Fisher's Map - The Heatmap to show strengths and weaknesses at a particular chessboard position.
+          <img src={fischerkarteLogo} alt='fischerkarte-logo' />
+          <Loader />
         </Col>
       </Row>
     )
