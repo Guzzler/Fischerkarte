@@ -7,6 +7,7 @@ import {
 import posed, { PoseGroup } from 'react-pose'
 
 import BaseContent from '../components/main-content/BaseContent'
+import NewGame from '../components/main-content/new-game/NewGame'
 import PageNotFound from '../components/common/error-pages/PageNotFound'
 
 const RouteContainer = posed.div({
@@ -22,6 +23,7 @@ function MainContent () {
           <PoseGroup>
             <RouteContainer key={999999}>
               <Switch location={location}>
+                <Route path="/new-game" component={NewGame} key="new-game" />
                 <Route path="/" component={BaseContent} key="base" />
                 <Route render={() => <PageNotFound />} key="notFound" />
               </Switch>

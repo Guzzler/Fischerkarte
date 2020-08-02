@@ -1,7 +1,9 @@
 import React from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col, Button } from 'antd'
+import { TableOutlined, AppstoreAddOutlined } from '@ant-design/icons'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import Loader from '../common/Loader'
 
 import fischerkarteLogo from '../../../assets/images/fischerkarte-logo.png'
@@ -9,11 +11,22 @@ import fischerkarteLogo from '../../../assets/images/fischerkarte-logo.png'
 class BaseContent extends React.Component {
   render() {
     return (
-      <Row className='padding--sides width-100 height-100 background-offwhite'>
-        <Col span={24} className='f48 center strong' >
-          <img src={fischerkarteLogo} alt='fischerkarte-logo' />
+      <Row className='padding--sides width-100 height-100 background-white'>
+        <Col span={24} className='center' >
+          <img src={fischerkarteLogo} alt='fischerkarte-logo' height={200} />
           <Loader />
-          <div style={{ marginBottom: 300 }}> Coming Soon ...</div>
+          <div>
+            <Link to='/place-pieces'>
+              <Button type="primary" className='margin-half--ends margin--sides background-green on-hover-light' style={{border: 0 }} shape="round" icon={<TableOutlined />}>
+                Place Pieces
+              </Button>
+            </Link>
+            <Link to='/new-game'>
+              <Button type="primary" className='margin-half--ends margin--sides background-peach on-hover-light text-black' style={{ border: 0 }} shape="round" icon={<AppstoreAddOutlined />}>
+                Start from New Game Position
+              </Button>  
+            </Link>
+          </div>
         </Col>
       </Row>
     )
