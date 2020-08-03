@@ -1,194 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Chess from "chess.js"; // import Chess from  "chess.js"(default) if recieving an error about new Chess() not being a constructor
-
+import React from "react";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
+import Chess from "chess.js"; 
 import Chessboard from "chessboardjsx";
 
-class HumanVsHuman extends Component {
-  static propTypes = { children: PropTypes.func };
-
-  state = {
-    fen: "start",
-    // square styles for active drop square
-    dropSquareStyle: {},
-    // custom square styles
-    squareStyles: {},
-    // square with the currently clicked piece
-    pieceSquare: "",
-    // currently clicked square
-    square: "",
-    // array of past game moves
-    history: []
-  };
-
-  componentDidMount() {
-    this.setState({
-      game: new Chess()
-    })
-  }
-
-  // keep clicked square style and remove hint squares
-  removeHighlightSquare = () => {
-    this.setState(({ pieceSquare, history }) => ({
-      squareStyles: squareStyling({ pieceSquare, history })
-    }));
-  };
-
-  // show possible moves
-  highlightSquare = (sourceSquare, squaresToHighlight) => {
-    const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
-      (a, c) => {
-        return {
-          ...a,
-          ...{
-            [c]: {
-              background:
-                "radial-gradient(circle, #fffc00 36%, transparent 40%)",
-              borderRadius: "50%"
-            }
-          },
-          ...squareStyling({
-            history: this.state.history,
-            pieceSquare: this.state.pieceSquare
-          })
-        };
-      },
-      {}
-    );
-
-    this.setState(({ squareStyles }) => ({
-      squareStyles: { ...squareStyles, ...highlightStyles }
-    }));
-  };
-
-  onDrop = ({ sourceSquare, targetSquare }) => {
-    // see if the move is legal
-    let move = this.state.game.move({
-      from: sourceSquare,
-      to: targetSquare,
-      promotion: "q" // always promote to a queen for example simplicity
-    });
-
-    // illegal move
-    if (move === null) return;
-    this.setState(({ history, pieceSquare }) => ({
-      fen: this.state.game.fen(),
-      history: this.state.game.history({ verbose: true }),
-      squareStyles: squareStyling({ pieceSquare, history })
-    }));
-  };
-
-  onMouseOverSquare = square => {
-    // get list of possible moves for this square
-    let moves = this.state.game.moves({
-      square: square,
-      verbose: true
-    });
-
-    // exit if there are no moves available for this square
-    if (moves.length === 0) return;
-
-    let squaresToHighlight = [];
-    for (var i = 0; i < moves.length; i++) {
-      squaresToHighlight.push(moves[i].to);
-    }
-
-    this.highlightSquare(square, squaresToHighlight);
-  };
-
-  onMouseOutSquare = square => this.removeHighlightSquare(square);
-
-  // central squares get diff dropSquareStyles
-  onDragOverSquare = square => {
-    this.setState({
-      dropSquareStyle:
-        square === "e4" || square === "d4" || square === "e5" || square === "d5"
-          ? { backgroundColor: "cornFlowerBlue" }
-          : { boxShadow: "inset 0 0 1px 4px rgb(255, 255, 0)" }
-    });
-  };
-
-  onSquareClick = square => {
-    this.setState(({ history }) => ({
-      squareStyles: squareStyling({ pieceSquare: square, history }),
-      pieceSquare: square
-    }));
-
-    let move = this.state.game.move({
-      from: this.state.pieceSquare,
-      to: square,
-      promotion: "q" // always promote to a queen for example simplicity
-    });
-
-    // illegal move
-    if (move === null) return;
-
-    this.setState({
-      fen: this.state.game.fen(),
-      history: this.state.game.history({ verbose: true }),
-      pieceSquare: ""
-    });
-  };
-
-  onSquareRightClick = square =>
-    this.setState({
-      squareStyles: { [square]: { backgroundColor: "deepPink" } }
-    });
-
-  render() {
-    const { fen, dropSquareStyle, squareStyles } = this.state;
-
-    return this.props.children({
-      squareStyles,
-      position: fen,
-      onMouseOverSquare: this.onMouseOverSquare,
-      onMouseOutSquare: this.onMouseOutSquare,
-      onDrop: this.onDrop,
-      dropSquareStyle,
-      onDragOverSquare: this.onDragOverSquare,
-      onSquareClick: this.onSquareClick,
-      onSquareRightClick: this.onSquareRightClick
-    });
-  }
-}
-
-export default function WithMoveValidation() {
-  return (
-    <div>
-      <HumanVsHuman>
-        {({
-          position,
-          onDrop,
-          onMouseOverSquare,
-          onMouseOutSquare,
-          squareStyles,
-          dropSquareStyle,
-          onDragOverSquare,
-          onSquareClick,
-          onSquareRightClick
-        }) => (
-            <Chessboard
-              id="humanVsHuman"
-              position={position}
-              onDrop={onDrop}
-              width={800}
-              onMouseOverSquare={onMouseOverSquare}
-              onMouseOutSquare={onMouseOutSquare}
-              boardStyle={{
-                borderRadius: "5px",
-                boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-              }}
-              squareStyles={squareStyles}
-              dropSquareStyle={dropSquareStyle}
-              onDragOverSquare={onDragOverSquare}
-              onSquareClick={onSquareClick}
-              onSquareRightClick={onSquareRightClick}
-            />
-          )}
-      </HumanVsHuman>
-    </div>
-  );
-}
+import {
+  onChangeNewGameBoardField
+} from '../../../actions'
 
 const squareStyling = ({ pieceSquare, history }) => {
   const sourceSquare = history.length && history[history.length - 1].from;
@@ -208,3 +26,198 @@ const squareStyling = ({ pieceSquare, history }) => {
     })
   };
 };
+
+
+class NewGame extends React.Component {
+
+  componentDidMount() {
+    const chessGame = new Chess()
+    this.props.onChangeNewGameBoardField({
+      game: chessGame
+    })
+  }
+  // keep clicked square style and remove hint squares
+  removeHighlightSquare = () => {
+    const {
+      pieceSquare,
+      history,
+    } = this.props.newGame
+
+    this.props.onChangeNewGameBoardField({
+      squareStyles: squareStyling({ pieceSquare, history })
+    });
+  };
+
+  // show possible moves
+  highlightSquare = (sourceSquare, squaresToHighlight) => {
+
+    const {
+      squareStyles,
+      history,
+      pieceSquare,
+    } = this.props.newGame
+
+    const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
+      (a, c) => {
+        return {
+          ...a,
+          ...{
+            [c]: {
+              background:
+                "radial-gradient(circle, #fffc00 36%, transparent 40%)",
+              borderRadius: "50%"
+            }
+          },
+          ...squareStyling({
+            history,
+            pieceSquare,
+          })
+        };
+      },
+      {}
+    );
+
+    this.props.onChangeNewGameBoardField({
+      squareStyles: { ...squareStyles, ...highlightStyles }
+    });
+  };
+
+  onDrop = ({ sourceSquare, targetSquare }) => {
+
+    const {
+      game,
+      history,
+      pieceSquare
+    } = this.props.newGame
+    // see if the move is legal
+    let move = game.move({
+      from: sourceSquare,
+      to: targetSquare,
+      promotion: "q" // always promote to a queen for example simplicity
+    });
+
+    // illegal move
+    if (move === null) return;
+    this.props.onChangeNewGameBoardField({
+      position: game.fen(),
+      history: game.history({ verbose: true }),
+      squareStyles: squareStyling({ pieceSquare, history })
+    });
+  };
+
+  onMouseOverSquare = square => {
+    // get list of possible moves for this square
+    const {
+      game 
+    } = this.props.newGame
+    let moves = game.moves({
+      square: square,
+      verbose: true
+    });
+
+    // exit if there are no moves available for this square
+    if (moves.length === 0) return;
+
+    let squaresToHighlight = [];
+    for (var i = 0; i < moves.length; i++) {
+      squaresToHighlight.push(moves[i].to);
+    }
+
+    this.highlightSquare(square, squaresToHighlight);
+  };
+
+  onMouseOutSquare = square => this.removeHighlightSquare(square);
+
+  // central squares get diff dropSquareStyles
+  onDragOverSquare = square => {
+    this.props.onChangeNewGameBoardField({
+      dropSquareStyle:
+        square === "e4" || square === "d4" || square === "e5" || square === "d5"
+          ? { backgroundColor: "cornFlowerBlue" }
+          : { boxShadow: "inset 0 0 1px 4px rgb(255, 255, 0)" }
+    });
+  };
+
+  onSquareClick = square => {
+
+    const {
+      history,
+      game,
+      pieceSquare
+    } = this.props.newGame
+    this.props.onChangeNewGameBoardField({
+      squareStyles: squareStyling({ pieceSquare: square, history }),
+      pieceSquare: square
+    });
+
+    let move = game.move({
+      from: pieceSquare,
+      to: square,
+      promotion: "q" // always promote to a queen for example simplicity
+    });
+
+    // illegal move
+    if (move === null) return;
+
+    this.props.onChangeNewGameBoardField({
+      position: game.fen(),
+      history: game.history({ verbose: true }),
+      pieceSquare: ""
+    });
+  };
+
+  onSquareRightClick = square =>
+    this.props.onChangeNewGameBoardField({
+      squareStyles: { [square]: { backgroundColor: "deepPink" } }
+    });
+
+  render() {
+    const {
+      position,
+      squareStyles,
+      dropSquareStyle
+    } = this.props.newGame;
+
+    return (
+      <div>
+        <Chessboard
+          id="humanVsHuman"
+          position={position}
+          onDrop={(dropProps) => this.onDrop(dropProps)}
+          width={800}
+          onMouseOverSquare={(square) => this.onMouseOverSquare(square)}
+          onMouseOutSquare={(square) => this.onMouseOutSquare(square)}
+          boardStyle={{
+            borderRadius: "5px",
+            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+          }}
+          squareStyles={squareStyles}
+          dropSquareStyle={dropSquareStyle}
+          onDragOverSquare={(square) => this.onDragOverSquare(square)}
+          onSquareClick={(square) => this.onSquareClick(square)}
+          onSquareRightClick={(square) => this.onSquareRightClick(square)}
+        />
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = ({ base }) => {
+  const {
+    newGame = {}
+  } = base
+  return {
+    newGame
+  }
+}
+
+NewGame.propTypes = {
+  onChangeNewGameBoardField: PropTypes.func.isRequired,
+  newGame: PropTypes.object.isRequired,
+}
+
+export default connect(
+  mapStateToProps, {
+    onChangeNewGameBoardField
+})(NewGame)
+
