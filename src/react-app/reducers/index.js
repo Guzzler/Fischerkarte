@@ -4,14 +4,9 @@ const initialState = {
   base: {
     newGame: {
       position: "start",
-      // square styles for active drop square
-      dropSquareStyle: {},
       // custom square styles
       squareStyles: {},
-      // square with the currently clicked piece
-      pieceSquare: "",
-      // currently clicked square
-      square: "",
+      // square with the currently clicked piec
       // array of past game moves
       history: [],
       game: null,
