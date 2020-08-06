@@ -10,6 +10,15 @@ const initialState = {
       // array of past game moves
       history: [],
       game: null,
+      weaknessScoring : {
+        blackScoring: {
+
+        },
+        whiteScoring: {
+
+        }
+      },
+      heatmapScoring : {},
     }
   }
 }

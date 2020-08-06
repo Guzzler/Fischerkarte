@@ -7,14 +7,19 @@ import Chessboard from "chessboardjsx";
 import {
   onChangeNewGameBoardField
 } from '../../../actions'
+import { findWeaknessScoringforParticularPosition, calculateHeatmapScoring } from "../../../../common/utils/NewGameUtils";
 
 
 class NewGame extends React.Component {
 
   componentDidMount() {
-    const chessGame = new Chess()
+    const game = new Chess()
+    const weaknessScoring = findWeaknessScoringforParticularPosition(game)
+    const heatmapScoring = calculateHeatmapScoring(weaknessScoring)
     this.props.onChangeNewGameBoardField({
-      game: chessGame
+      game,
+      weaknessScoring,
+      heatmapScoring,
     })
   }
 
@@ -69,11 +74,14 @@ class NewGame extends React.Component {
         }
       })
     }
-
+    const weaknessScoring = findWeaknessScoringforParticularPosition(game)
+    const heatmapScoring = calculateHeatmapScoring(weaknessScoring)
     this.props.onChangeNewGameBoardField({
       position: game.fen(),
       history: game.history({ verbose: true }),
-      squareStyles
+      squareStyles,
+      weaknessScoring,
+      heatmapScoring,
     });
   };
 
