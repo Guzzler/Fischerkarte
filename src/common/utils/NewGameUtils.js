@@ -64,40 +64,58 @@ export const findWeaknessScoringforParticularPosition = (game) => {
             }
             break
           case 'q':
+            const diagonalMoves = calculateBishopMoves(rankIndex, squareIndex, squareMoves)
+            const straightMoves = calculateRookMoves(rankIndex, squareIndex, squareMoves)
             if (isWhitePiece) {
-              squareMoves.forEach((move) => {
-                whiteScoring = addScoreToDict(whiteScoring, move.to, 8)
+              diagonalMoves.forEach((move) => {
+                whiteScoring = addScoreToDict(whiteScoring, move, 8)
+              })
+              straightMoves.forEach((move) => {
+                whiteScoring = addScoreToDict(whiteScoring, move, 8)
               })
             } else {
-              squareMoves.forEach((move) => {
-                blackScoring = addScoreToDict(blackScoring, move.to, 8)
+              diagonalMoves.forEach((move) => {
+                blackScoring = addScoreToDict(blackScoring, move, 8)
+              })
+              straightMoves.forEach((move) => {
+                blackScoring = addScoreToDict(blackScoring, move, 8)
               })
             }
             break
           case 'n':
-          case 'b':
+            const knightMoves = calculateKnightMoves(rankIndex, squareIndex)
             if (isWhitePiece) {
-              squareMoves.forEach((move) => {
-                whiteScoring = addScoreToDict(whiteScoring, move.to, 16)
+              knightMoves.forEach((move) => {
+                whiteScoring = addScoreToDict(whiteScoring, move, 16)
               })
             } else {
-              squareMoves.forEach((move) => {
-                blackScoring = addScoreToDict(blackScoring, move.to, 16)
+              knightMoves.forEach((move) => {
+                blackScoring = addScoreToDict(blackScoring, move, 16)
+              })
+            }
+            break
+          case 'b':
+            const bishopMoves = calculateBishopMoves(rankIndex, squareIndex, squareMoves)
+            if (isWhitePiece) {
+              bishopMoves.forEach((move) => {
+                whiteScoring = addScoreToDict(whiteScoring, move, 16)
+              })
+            } else {
+              bishopMoves.forEach((move) => {
+                blackScoring = addScoreToDict(blackScoring, move, 16)
               })
             }
             break
           case 'k':
+            const files = [squareIndex - 1, squareIndex, squareIndex + 1].filter((ind) => ind >= 0 && ind <= 7)
+            const ranks = [rankIndex - 1, rankIndex, rankIndex + 1].filter((ind) => ind >= 0 && ind <= 7)
             if (isWhitePiece) {
-              const files = [squareIndex - 1, squareIndex, squareIndex + 1].filter((ind) => ind >= 0 && ind <= 7)
-              const ranks = [rankIndex - 1, rankIndex, rankIndex + 1].filter((ind) => ind >= 0 && ind <= 7)
               files.forEach((file) => {
                 ranks.forEach((rank) => {
                   whiteScoring = addScoreToDict(whiteScoring, CHESS_BOARD_SQUARES[(rank * 8) + file], 4)
                 })
               })
             } else {
-              const files = [squareIndex - 1, squareIndex, squareIndex + 1].filter((ind) => ind >= 0 && ind <= 7)
-              const ranks = [rankIndex - 1, rankIndex, rankIndex + 1].filter((ind) => ind >= 0 && ind <= 7)
               files.forEach((file) => {
                 ranks.forEach((rank) => {
                   blackScoring = addScoreToDict(blackScoring, CHESS_BOARD_SQUARES[(rank * 8) + file], 4)
@@ -106,13 +124,14 @@ export const findWeaknessScoringforParticularPosition = (game) => {
             }
             break
           case 'r':
+            const rookMoves = calculateRookMoves(rankIndex, squareIndex, squareMoves)
             if (isWhitePiece) {
-              squareMoves.forEach((move) => {
-                whiteScoring = addScoreToDict(whiteScoring, move.to, 4)
+              rookMoves.forEach((move) => {
+                whiteScoring = addScoreToDict(whiteScoring, move, 12)
               })
             } else {
-              squareMoves.forEach((move) => {
-                blackScoring = addScoreToDict(blackScoring, move.to, 12)
+              rookMoves.forEach((move) => {
+                blackScoring = addScoreToDict(blackScoring, move, 12)
               })
             }
             break
@@ -140,6 +159,141 @@ const addScoreToDict = (dict, square, scoreToAdd) => {
   }
   return changedDict
 } 
+
+const calculateKnightMoves = (rankIndex, squareIndex) => {
+  const knightPlacesToMove = []
+  const rankMinus1True = rankIndex - 1 >= 0
+  const rankMinus2True = rankIndex - 2 >= 0
+  const squareMinus1True = squareIndex - 1 >= 0
+  const squareMinus2True = squareIndex - 2 >= 0
+  const rankPlus1True = rankIndex + 1 <= 7
+  const rankPlus2True = rankIndex + 2 <= 7
+  const squarePlus1True = squareIndex + 1 <= 7
+  const squarePlus2True = squareIndex + 2 <= 7
+
+  if (rankMinus1True) {
+    if (squarePlus2True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex - 1) * 8) + squareIndex + 2])
+    }
+    if (squareMinus2True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex - 1) * 8) + squareIndex - 2])
+    }
+  }
+
+  if (rankMinus2True) {
+    if (squarePlus1True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex - 2) * 8) + squareIndex + 1])
+    }
+    if (squareMinus1True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex - 2) * 8) + squareIndex - 1])
+    }
+  }
+
+  if (rankPlus2True) {
+    if (squarePlus1True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex + 2) * 8) + squareIndex + 1])
+    }
+    if (squareMinus1True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex + 2) * 8) + squareIndex - 1])
+    }
+  }
+
+  if (rankPlus1True) {
+    if (squarePlus2True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex + 1) * 8) + squareIndex + 2])
+    }
+    if (squareMinus2True) {
+      knightPlacesToMove.push(CHESS_BOARD_SQUARES[((rankIndex + 1) * 8) + squareIndex - 2])
+    }
+  }
+  return knightPlacesToMove
+}
+
+const calculateBishopMoves = (rankIndex, squareIndex, squareMoves) => {
+  const bishopPlacestoMove = []
+  const allBishopToMoveSquares = squareMoves.map((move) => move.to)
+  let goNorthWest = true
+  let goNorthEast = true
+  let goSouthEast = true
+  let goSouthWest = true
+  for (let increment = 1; increment <= 7; increment++) {
+    const rankMinus = ((rankIndex - increment) >= 0)
+    const rankPlus = ((rankIndex + increment) <= 7)
+    const squareMinus = ((squareIndex - increment) >= 0)
+    const squarePlus = ((squareIndex + increment) <= 7)
+    if (!goNorthWest && !goNorthEast && !goSouthWest && !goSouthEast) {
+      break;
+    }
+    if (goNorthWest && rankMinus && squareMinus) {
+      if (allBishopToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex - increment) * 8) + squareIndex - increment]) === -1) {
+        goNorthWest = false
+      }
+      bishopPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex - increment) * 8) + squareIndex - increment])
+    }
+    if (goNorthEast && rankMinus && squarePlus) {
+      if (allBishopToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex - increment) * 8) + squareIndex + increment]) === -1) {
+        goNorthEast = false
+      }
+      bishopPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex - increment) * 8) + squareIndex + increment])
+    }
+    if (goSouthWest && rankPlus && squareMinus) {
+      if (allBishopToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex + increment) * 8) + squareIndex - increment]) === -1) {
+        goSouthWest = false
+      }
+      bishopPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex + increment) * 8) + squareIndex - increment])
+    }
+    if (goSouthEast && rankPlus && squareMinus) {
+      if (allBishopToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex + increment) * 8) + squareIndex + increment]) === -1) {
+        goSouthEast = false
+      }
+      bishopPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex + increment) * 8) + squareIndex + increment])
+    }
+  }
+  return bishopPlacestoMove
+}
+
+const calculateRookMoves = (rankIndex, squareIndex, squareMoves) => {
+  const rookPlacestoMove = []
+  const allRookToMoveSquares = squareMoves.map((move) => move.to)
+  let goNorth = true
+  let goEast = true
+  let goSouth = true
+  let goWest = true
+  for (let increment = 1; increment <= 7; increment++) {
+    const rankMinus = ((rankIndex - increment) >= 0)
+    const rankPlus = ((rankIndex + increment) <= 7)
+    const squareMinus = ((squareIndex - increment) >= 0)
+    const squarePlus = ((squareIndex + increment) <= 7)
+    if (!goNorth && !goEast && !goSouth && !goWest) {
+      break;
+    }
+    if (goNorth && rankMinus) {
+      if (allRookToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex - increment) * 8) + squareIndex]) === -1) {
+        goNorth = false
+      }
+      rookPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex - increment) * 8) + squareIndex])
+    }
+    if (goSouth && rankPlus) {
+      if (allRookToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex + increment) * 8) + squareIndex]) === -1) {
+        goSouth = false
+      }
+      rookPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex + increment) * 8) + squareIndex])
+    }
+    if (goWest && squareMinus) {
+      if (allRookToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex) * 8) + squareIndex - increment]) === -1) {
+        goWest = false
+      }
+      rookPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex) * 8) + squareIndex - increment])
+    }
+    if (goEast && squarePlus) {
+      if (allRookToMoveSquares.indexOf(CHESS_BOARD_SQUARES[((rankIndex) * 8) + squareIndex + increment]) === -1) {
+        goEast = false
+      }
+      rookPlacestoMove.push(CHESS_BOARD_SQUARES[((rankIndex) * 8) + squareIndex + increment])
+    }
+  }
+  return rookPlacestoMove
+}
 
 export const calculateHeatmapScoring = (weaknessScoring) => {
   const heatmapScoring = {}
