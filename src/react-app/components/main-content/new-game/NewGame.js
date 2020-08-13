@@ -7,7 +7,7 @@ import Chessboard from "chessboardjsx";
 import {
   onChangeNewGameBoardField
 } from '../../../actions'
-import { findWeaknessScoringforParticularPosition, calculateHeatmapScoring } from "../../../../common/utils/NewGameUtils";
+import { findWeaknessScoringforParticularPosition, calculateHeatmapScoring, findSquarestoHighlightforHeatmap } from "../../../../common/utils/NewGameUtils";
 
 
 class NewGame extends React.Component {
@@ -76,12 +76,14 @@ class NewGame extends React.Component {
     }
     const weaknessScoring = findWeaknessScoringforParticularPosition(game)
     const heatmapScoring = calculateHeatmapScoring(weaknessScoring)
+    const heatmapStyles = findSquarestoHighlightforHeatmap(heatmapScoring)
     this.props.onChangeNewGameBoardField({
       position: game.fen(),
       history: game.history({ verbose: true }),
       squareStyles,
       weaknessScoring,
       heatmapScoring,
+      heatmapStyles,
     });
   };
 
@@ -114,6 +116,8 @@ class NewGame extends React.Component {
     const {
       position,
       squareStyles,
+      highlightHeatmap = true,
+      heatmapStyles,
     } = this.props.newGame;
 
     return (
@@ -130,7 +134,7 @@ class NewGame extends React.Component {
           transitionDuration={300}
           darkSquareStyle={{ backgroundColor: '#00887A'}}
           lightSquareStyle={{ backgroundColor: '#fffeee' }}
-          squareStyles={squareStyles}
+          squareStyles={highlightHeatmap ? heatmapStyles : squareStyles}
           onSquareRightClick={(square) => this.onSquareRightClick(square)}
           onMouseOverSquare={(square) => this.onMouseOverSquare(square)}
         />

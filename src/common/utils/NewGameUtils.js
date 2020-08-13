@@ -10,6 +10,23 @@ export const CHESS_BOARD_SQUARES = [
   'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1',
 ]
 
+export const heatmapRGBMapping = {
+  '0.05': 'rgb(165,0,38)',
+  '0.15': 'rgb(215,48,39)',
+  '0.25': 'rgb(244,109,67)',
+  '0.35': 'rgb(253,174,97)',
+  '0.45': 'rgb(254,224,144)',
+  '0.55': 'rgb(224,243,248)',
+  '0.65': 'rgb(171,217,233)',
+  '0.75': 'rgb(116,173,209)',
+  '0.85': 'rgb(69,117,180)',
+  '0.95': 'rgb(49,54,149)',
+}
+
+export const heatmapBins = [
+  0.05,0.15,0.25,0.35,0.45,0.55,0.65,0.75,0.85,0.95
+]
+
 export const findWeaknessScoringforParticularPosition = (game) => {
   const boardPosition = game.board()
   let whiteScoring = {}
@@ -304,3 +321,33 @@ export const calculateHeatmapScoring = (weaknessScoring) => {
   })
   return heatmapScoring
 }
+
+export const findSquarestoHighlightforHeatmap = (heatmapScoring) => {
+  let maxHeatmapScore = -99999
+  let minHeatmapScore = 99999
+
+  CHESS_BOARD_SQUARES.forEach((square) => {
+    if(heatmapScoring[square] > maxHeatmapScore) {
+      maxHeatmapScore = heatmapScoring[square]
+    }
+    if (heatmapScoring[square] < minHeatmapScore) {
+      minHeatmapScore = heatmapScoring[square]
+    }
+  })
+
+  const range = maxHeatmapScore - minHeatmapScore
+  const normalizedHeatmapScores = {}
+  const highlightedSquareStyles = {}
+  CHESS_BOARD_SQUARES.forEach((square) => {
+    normalizedHeatmapScores[square] = ((heatmapScoring[square] - minHeatmapScore)/range)
+    const closestBin = heatmapBins.reduce((a, b) => {
+      return Math.abs(b - normalizedHeatmapScores[square]) < Math.abs(a - normalizedHeatmapScores[square]) ? b : a;
+    });
+    const closestHeatmapColor = heatmapRGBMapping[closestBin.toString()]
+    highlightedSquareStyles[square] = {
+      backgroundColor: closestHeatmapColor
+    }
+  })
+
+  return highlightedSquareStyles
+} 
