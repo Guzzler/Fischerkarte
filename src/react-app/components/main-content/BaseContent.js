@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col, Button } from 'antd'
-import { TableOutlined, AppstoreAddOutlined } from '@ant-design/icons'
+import { AppstoreAddOutlined } from '@ant-design/icons'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -16,11 +16,6 @@ class BaseContent extends React.Component {
           <img src={fischerkarteLogo} alt='fischerkarte-logo' height={200} />
           <Loader />
           <div>
-            <Link to='/place-pieces'>
-              <Button type="primary" className='margin-half--ends margin--sides background-green on-hover-light' style={{border: 0 }} shape="round" icon={<TableOutlined />}>
-                Place Pieces
-              </Button>
-            </Link>
             <Link to='/new-game'>
               <Button type="primary" className='margin-half--ends margin--sides background-peach on-hover-light text-black' style={{ border: 0 }} shape="round" icon={<AppstoreAddOutlined />}>
                 Start from New Game Position

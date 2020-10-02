@@ -345,7 +345,8 @@ export const findSquarestoHighlightforHeatmap = (heatmapScoring) => {
     });
     const closestHeatmapColor = heatmapRGBMapping[closestBin.toString()]
     highlightedSquareStyles[square] = {
-      backgroundColor: closestHeatmapColor
+      backgroundColor: closestHeatmapColor,
+      border: '1px solid #000'
     }
   })
 
