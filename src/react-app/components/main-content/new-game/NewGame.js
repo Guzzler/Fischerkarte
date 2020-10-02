@@ -8,7 +8,9 @@ import {
   onChangeNewGameBoardField
 } from '../../../actions'
 import { findWeaknessScoringforParticularPosition, calculateHeatmapScoring, findSquarestoHighlightforHeatmap } from "../../../../common/utils/NewGameUtils";
+import { Layout } from "antd";
 
+const { Content, Sider } = Layout
 
 class NewGame extends React.Component {
 
@@ -121,24 +123,30 @@ class NewGame extends React.Component {
     } = this.props.newGame;
 
     return (
-      <div>
-        <Chessboard
-          id="new-game"
-          position={position}
-          onDrop={(dropProps) => this.onDrop(dropProps)}
-          width={800}
-          boardStyle={{
-            borderRadius: "5px",
-            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-          }}
-          transitionDuration={300}
-          darkSquareStyle={{ backgroundColor: '#00887A'}}
-          lightSquareStyle={{ backgroundColor: '#fffeee' }}
-          squareStyles={highlightHeatmap ? heatmapStyles : squareStyles}
-          onSquareRightClick={(square) => this.onSquareRightClick(square)}
-          onMouseOverSquare={(square) => this.onMouseOverSquare(square)}
-        />
-      </div>
+      <Layout>
+        <Content>
+        <div className='center'>
+          <Chessboard
+            id="new-game"
+            position={position}
+            onDrop={(dropProps) => this.onDrop(dropProps)}
+            width={800}
+            boardStyle={{
+              borderRadius: "5px",
+              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+              margin: 'auto'
+            }}
+            transitionDuration={300}
+            darkSquareStyle={{ backgroundColor: '#00887A' }}
+            lightSquareStyle={{ backgroundColor: '#fffeee' }}
+            squareStyles={highlightHeatmap ? heatmapStyles : squareStyles}
+            onSquareRightClick={(square) => this.onSquareRightClick(square)}
+            onMouseOverSquare={(square) => this.onMouseOverSquare(square)}
+          />
+        </div></Content>
+        <Sider>Sider</Sider>
+      </Layout>
+      
     );
   }
 }
